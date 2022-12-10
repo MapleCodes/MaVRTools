@@ -3,14 +3,17 @@ Time Wasted: 8hrs
 """
 
 import TIER.trifork as TRIFORK # You won't have this one.
-import functions_env as FB
+import functions_env as FE
 import functions_vr as FVR
 import functions_controller as FC
 import functions_discord as FD
 import initialization as MINIT
+# import main as MAIN
 
 import dotenv, os
 import customtkinter as ctk
+import threading
+from threading import Thread
 
 
 ### GLOBAL VARIABLES ###
@@ -60,6 +63,10 @@ def DISCTAB_TEXTBOX_SEND_BIND(events):
     DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
     # DISCTAB_BUTTON_SEND.destroy()
 
+def DISCTAB_TEXTBOX_INBOUND(message):
+    DISCTAB_TEXTBOX_OUTPUT.configure(state="normal")
+    DISCTAB_TEXTBOX_OUTPUT.insert("end", f"{message}\n")
+    DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
 
 ### END INLINE FUNCTIONS ###
 
@@ -79,16 +86,16 @@ LEFT_PANEL.grid_rowconfigure(10, weight=1)
 LP_LABEL_FRONTER = ctk.CTkLabel(LEFT_PANEL, text="$ Malunette", font=(f"{FONT}", 35, "bold"))
 LP_LABEL_FRONTER.grid(column=0, row=0, padx=20, pady=(35, 35))
 
-LP_BUTTON_DISCORD = ctk.CTkButton(LEFT_PANEL, text="DISCORD TOKEN", font=SIDE_BUTTON_FDATA, command=FB.dotENVDiscordBot)
+LP_BUTTON_DISCORD = ctk.CTkButton(LEFT_PANEL, text="DISCORD TOKEN", font=SIDE_BUTTON_FDATA, command=FE.dotENVDiscordBot)
 LP_BUTTON_DISCORD.grid(column=0, row=1, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
-LP_BUTTON_OPENAI = ctk.CTkButton(LEFT_PANEL, text="OPENAI TOKEN", font=SIDE_BUTTON_FDATA, command=FB.dotENVOpenAI)
+LP_BUTTON_OPENAI = ctk.CTkButton(LEFT_PANEL, text="OPENAI TOKEN", font=SIDE_BUTTON_FDATA, command=FE.dotENVOpenAI)
 LP_BUTTON_OPENAI.grid(column=0, row=2, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
 LP_BUTTON_WEBCAPTIONER = ctk.CTkButton(LEFT_PANEL, font=SIDE_BUTTON_FDATA, text="WEBCAPTIONER")
 LP_BUTTON_WEBCAPTIONER.grid(column=0, row=3, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
-LP_BUTTON_TRIFORK = ctk.CTkButton(LEFT_PANEL, text="TRIFORK KEY", font=SIDE_BUTTON_FDATA, command=FB.dotENVTriFork)
+LP_BUTTON_TRIFORK = ctk.CTkButton(LEFT_PANEL, text="TRIFORK KEY", font=SIDE_BUTTON_FDATA, command=FE.dotENVTriFork)
 LP_BUTTON_TRIFORK.grid(column=0, row=4, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
 # # # # #
@@ -96,13 +103,13 @@ LP_BUTTON_TRIFORK.grid(column=0, row=4, padx=20, pady=(0, 20), ipadx=25, ipady=7
 LP_SWITCH_DELETEENV = ctk.CTkSwitch(LEFT_PANEL, text="Enable Delete", font=SIDE_BUTTON_FDATA, command=LP_SWITCH_DELETEENV_FUNCTION, variable=LP_SWITCH_VAR, onvalue="on", offvalue="off")
 LP_SWITCH_DELETEENV.grid(column=0, row=11, padx=(0, 75), pady=(0, 20))
 
-LP_BUTTON_DELETEENV = ctk.CTkButton(LEFT_PANEL, text="DELETE .ENV CONFIG", font=SIDE_BUTTON_FDATA, command=FB.dotENVDelete, fg_color="#ab1b25", hover_color="#8c1119")
+LP_BUTTON_DELETEENV = ctk.CTkButton(LEFT_PANEL, text="DELETE .ENV CONFIG", font=SIDE_BUTTON_FDATA, command=FE.dotENVDelete, fg_color="#ab1b25", hover_color="#8c1119")
 LP_BUTTON_DELETEENV.grid(column=0, row=12, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
-LP_BUTTON_STOP = ctk.CTkButton(LEFT_PANEL, text="STOP", font=SIDE_BUTTON_FDATA, command=FB.dotENVDelete, fg_color="#b3730c", hover_color="#6b4506")
+LP_BUTTON_STOP = ctk.CTkButton(LEFT_PANEL, text="STOP", font=SIDE_BUTTON_FDATA, command=FC.StopApp, fg_color="#b3730c", hover_color="#6b4506")
 LP_BUTTON_STOP.grid(column=0, row=13, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
-LP_BUTTON_START = ctk.CTkButton(LEFT_PANEL, text="START ALL", font=SIDE_BUTTON_FDATA, command=FVR.TriForkDecryption, fg_color="#1e9400", hover_color="#236912")
+LP_BUTTON_START = ctk.CTkButton(LEFT_PANEL, text="START ALL", font=SIDE_BUTTON_FDATA, command=FC.StartApp, fg_color="#1e9400", hover_color="#236912")
 LP_BUTTON_START.grid(column=0, row=14, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
 # # # # #
@@ -115,7 +122,7 @@ app.grid_columnconfigure(1, weight=1)
 app.grid_rowconfigure(0, weight=0)
 app.grid_rowconfigure(1, weight=1)
 
-MA_LABEL_TOP = ctk.CTkLabel(app, text="OUTPUT / INPUT DISPLAY", font=(f"{FONT}", 20, "bold"))
+MA_LABEL_TOP = ctk.CTkLabel(app, text="OUTPUT / INPUT DISPLAY", font=("Consolas", 20, "bold"))
 MA_LABEL_TOP.grid(column=1, row=0, padx=20, pady=(20, 0), sticky="w")
 
 MAIN_TABVIEW = ctk.CTkTabview(app)
@@ -125,11 +132,12 @@ MAIN_TABVIEW.add("WebCaptioner")
 MAIN_TABVIEW.add("TriFork")
 
 #region Discord TABVIEW
-DISCTAB_TEXTBOX_OUTPUT = ctk.CTkTextbox(MAIN_TABVIEW.tab('Discord'), font=(f"{FONT}", 12))
+DISCTAB_TEXTBOX_OUTPUT = ctk.CTkTextbox(MAIN_TABVIEW.tab('Discord'), font=("Consolas", 12))
 MAIN_TABVIEW.tab('Discord').grid_columnconfigure(0, weight=1)
+MAIN_TABVIEW.tab('Discord').grid_rowconfigure(0, weight=1)
 
-DISCTAB_TEXTBOX_OUTPUT.grid(column=0, row=0, padx=20, pady=(20, 20), sticky="nsew", columnspan=2)
-DISCTAB_TEXTBOX_OUTPUT.insert("end", "< Console >\n")
+DISCTAB_TEXTBOX_OUTPUT.grid(column=0, row=0, padx=20, pady=(0, 20), sticky="nsew", columnspan=2)
+DISCTAB_TEXTBOX_OUTPUT.insert("end", "< Waiting for Connection >\n")
 DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
 
 DISCTAB_TEXTBOX_INPUT = ctk.CTkTextbox(MAIN_TABVIEW.tab('Discord'), font=(f"{FONT}", 12), height=20)
@@ -153,7 +161,8 @@ LP_BUTTON_DELETEENV.configure(state="disabled")
 ### END START CONFIG ###
 
 
-### BEGIN ###
-MINIT.fts()
-app.mainloop()
-### END BEGIN ###
+if __name__ == "__main__":
+    ### BEGIN ###
+    MINIT.fts()
+    app.mainloop()
+    ### END BEGIN ###
