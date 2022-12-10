@@ -54,8 +54,8 @@ LP_BUTTON_TRIFORK.grid(column=0, row=4, padx=20, pady=(0, 20), ipadx=25, ipady=7
 LP_BUTTON_DELETEENV = ctk.CTkButton(LEFT_PANEL, text="DELETE .ENV CONFIG", font=SIDE_BUTTON_FDATA, command=FB.dotENVDelete, fg_color="#ab1b25", hover_color="#8c1119")
 LP_BUTTON_DELETEENV.grid(column=0, row=11, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
-LP_BUTTON_TRIFORK = ctk.CTkButton(LEFT_PANEL, text="START ALL", font=SIDE_BUTTON_FDATA, command=FVR.TriForkDecryption, fg_color="#1e9400", hover_color="#236912")
-LP_BUTTON_TRIFORK.grid(column=0, row=12, padx=20, pady=(0, 20), ipadx=25, ipady=7)
+LP_BUTTON_START = ctk.CTkButton(LEFT_PANEL, text="START ALL", font=SIDE_BUTTON_FDATA, command=FVR.TriForkDecryption, fg_color="#1e9400", hover_color="#236912")
+LP_BUTTON_START.grid(column=0, row=12, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
 ### END LEFT PANEL ###
 
@@ -85,6 +85,7 @@ MAIN_TABVIEW.add("TriFork")
 
 ### START CONFIG ###
 LP_BUTTON_WEBCAPTIONER.configure(state="disabled")
+LP_BUTTON_TRIFORK.configure(state="disabled")
 ### END START CONFIG ###
 
 
