@@ -3,10 +3,14 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 import dotenv, os
+
+# import TIER.trifork as TRIFORK # You won't have this one.
 import functions_env as FE
 import functions_vr as FVR
 import functions_controller as FC
 import functions_discord as FD
+# import initialization as MINIT
+# import main as MAIN
 
 from threading import Thread
 

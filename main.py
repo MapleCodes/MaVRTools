@@ -1,5 +1,5 @@
 """
-Time Wasted: 8hrs
+Time Wasted: 12 hrs
 """
 
 import TIER.trifork as TRIFORK # You won't have this one.
@@ -10,7 +10,7 @@ import functions_discord as FD
 import initialization as MINIT
 # import main as MAIN
 
-import dotenv, os
+import dotenv, os, asyncio
 import customtkinter as ctk
 import threading
 from threading import Thread
@@ -33,6 +33,13 @@ ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue") 
 
 ### END MAIN WINDOW ###
+
+"""
+TO FUTURE MAPLE:
+
+TRY USING CLASS TO BLOCK OFF EVERYTHING.
+AND CHANGING THE DEF TO ACCEPT ARGUMENTS AND RETURN VALUES.
+"""
 
 
 ### INLINE FUNCTIONS ###
@@ -62,11 +69,6 @@ def DISCTAB_TEXTBOX_SEND_BIND(events):
     DISCTAB_TEXTBOX_SEND()
     DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
     # DISCTAB_BUTTON_SEND.destroy()
-
-def DISCTAB_TEXTBOX_INBOUND(message):
-    DISCTAB_TEXTBOX_OUTPUT.configure(state="normal")
-    DISCTAB_TEXTBOX_OUTPUT.insert("end", f"{message}\n")
-    DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
 
 ### END INLINE FUNCTIONS ###
 
@@ -163,6 +165,7 @@ LP_BUTTON_DELETEENV.configure(state="disabled")
 
 if __name__ == "__main__":
     ### BEGIN ###
-    MINIT.fts()
-    app.mainloop()
+    if (threading.current_thread().name == "MainThread"):
+        MINIT.fts()
+        app.mainloop()
     ### END BEGIN ###
