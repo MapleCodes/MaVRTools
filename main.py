@@ -1,11 +1,12 @@
 """
-Time Wasted: 4hrs
+Time Wasted: 8hrs
 """
 
 import TIER.trifork as TRIFORK # You won't have this one.
 import functions_env as FB
 import functions_vr as FVR
 import functions_controller as FC
+import functions_discord as FD
 import initialization as MINIT
 
 import dotenv, os
@@ -38,6 +39,28 @@ def LP_SWITCH_DELETEENV_FUNCTION():
     elif LP_SWITCH_VAR.get() == "on":
         LP_BUTTON_DELETEENV.configure(state="normal")
 
+def DISCTAB_TEXTBOX_SEND():
+    message = DISCTAB_TEXTBOX_INPUT.get("0.0", "end")[:-1]
+    message = message.replace("\n", "")
+    DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+    if message.__len__() > 0:
+        DISCTAB_TEXTBOX_OUTPUT.configure(state="normal")
+        DISCTAB_TEXTBOX_OUTPUT.insert("end", f"YOU: {message}\n")
+        DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+        DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
+
+# Something wrong with Tkinter and binds. This is a workaround.
+def DISCTAB_TEXTBOX_SEND_BIND(events):
+    message = DISCTAB_TEXTBOX_INPUT.get("0.0", "end")[:-1]
+    if message == "\n":
+        DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+        return
+    
+    DISCTAB_TEXTBOX_SEND()
+    DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+    # DISCTAB_BUTTON_SEND.destroy()
+
+
 ### END INLINE FUNCTIONS ###
 
 
@@ -45,7 +68,6 @@ def LP_SWITCH_DELETEENV_FUNCTION():
 LP_SWITCH_VAR = ctk.StringVar(value="off")
 
 ### END INLINE VARIABLES ###
-
 
 ### LEFT PANEL ###
 app.grid_rowconfigure(0, weight=1)
@@ -69,14 +91,21 @@ LP_BUTTON_WEBCAPTIONER.grid(column=0, row=3, padx=20, pady=(0, 20), ipadx=25, ip
 LP_BUTTON_TRIFORK = ctk.CTkButton(LEFT_PANEL, text="TRIFORK KEY", font=SIDE_BUTTON_FDATA, command=FB.dotENVTriFork)
 LP_BUTTON_TRIFORK.grid(column=0, row=4, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
+# # # # #
+
 LP_SWITCH_DELETEENV = ctk.CTkSwitch(LEFT_PANEL, text="Enable Delete", font=SIDE_BUTTON_FDATA, command=LP_SWITCH_DELETEENV_FUNCTION, variable=LP_SWITCH_VAR, onvalue="on", offvalue="off")
 LP_SWITCH_DELETEENV.grid(column=0, row=11, padx=(0, 75), pady=(0, 20))
 
 LP_BUTTON_DELETEENV = ctk.CTkButton(LEFT_PANEL, text="DELETE .ENV CONFIG", font=SIDE_BUTTON_FDATA, command=FB.dotENVDelete, fg_color="#ab1b25", hover_color="#8c1119")
 LP_BUTTON_DELETEENV.grid(column=0, row=12, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
+LP_BUTTON_STOP = ctk.CTkButton(LEFT_PANEL, text="STOP", font=SIDE_BUTTON_FDATA, command=FB.dotENVDelete, fg_color="#b3730c", hover_color="#6b4506")
+LP_BUTTON_STOP.grid(column=0, row=13, padx=20, pady=(0, 20), ipadx=25, ipady=7)
+
 LP_BUTTON_START = ctk.CTkButton(LEFT_PANEL, text="START ALL", font=SIDE_BUTTON_FDATA, command=FVR.TriForkDecryption, fg_color="#1e9400", hover_color="#236912")
-LP_BUTTON_START.grid(column=0, row=13, padx=20, pady=(0, 20), ipadx=25, ipady=7)
+LP_BUTTON_START.grid(column=0, row=14, padx=20, pady=(0, 20), ipadx=25, ipady=7)
+
+# # # # #
 
 ### END LEFT PANEL ###
 
@@ -86,7 +115,7 @@ app.grid_columnconfigure(1, weight=1)
 app.grid_rowconfigure(0, weight=0)
 app.grid_rowconfigure(1, weight=1)
 
-MA_LABEL_TOP = ctk.CTkLabel(app, text="GENERAL OUTPUT / INPUT DISPLAY", font=(f"{FONT}", 20, "bold"))
+MA_LABEL_TOP = ctk.CTkLabel(app, text="OUTPUT / INPUT DISPLAY", font=(f"{FONT}", 20, "bold"))
 MA_LABEL_TOP.grid(column=1, row=0, padx=20, pady=(20, 0), sticky="w")
 
 MAIN_TABVIEW = ctk.CTkTabview(app)
@@ -96,8 +125,19 @@ MAIN_TABVIEW.add("WebCaptioner")
 MAIN_TABVIEW.add("TriFork")
 
 #region Discord TABVIEW
-DISCTAB_CANVAS = ctk.CTkCanvas(MAIN_TABVIEW.tab("Discord"))
+DISCTAB_TEXTBOX_OUTPUT = ctk.CTkTextbox(MAIN_TABVIEW.tab('Discord'), font=(f"{FONT}", 12))
+MAIN_TABVIEW.tab('Discord').grid_columnconfigure(0, weight=1)
 
+DISCTAB_TEXTBOX_OUTPUT.grid(column=0, row=0, padx=20, pady=(20, 20), sticky="nsew", columnspan=2)
+DISCTAB_TEXTBOX_OUTPUT.insert("end", "< Console >\n")
+DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
+
+DISCTAB_TEXTBOX_INPUT = ctk.CTkTextbox(MAIN_TABVIEW.tab('Discord'), font=(f"{FONT}", 12), height=20)
+DISCTAB_TEXTBOX_INPUT.grid(column=0, row=1, padx=(20, 0), pady=(0, 20), sticky="nsew")
+DISCTAB_TEXTBOX_INPUT.bind("<Return>", DISCTAB_TEXTBOX_SEND_BIND)
+
+DISCTAB_BUTTON_SEND = ctk.CTkButton(MAIN_TABVIEW.tab('Discord'), text="SEND", font=SIDE_BUTTON_FDATA, command=DISCTAB_TEXTBOX_SEND, fg_color="#1e9400", hover_color="#236912")
+DISCTAB_BUTTON_SEND.grid(column=1, row=1, padx=20, pady=(0, 20), ipadx=25, ipady=5)
 
 #endregion
 
