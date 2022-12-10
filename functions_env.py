@@ -1,5 +1,5 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# This file contains the all the functions that are used for GUI. #
+# This file contains the all the functions that are used for ENV. #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 import random
@@ -38,5 +38,3 @@ def dotENVTriFork():
     dotENVHelper(dialog, "TRIFORK_1")
     dialog = ctk.CTkInputDialog(title="Second Set", text="Enter the relevant details")
     dotENVHelper(dialog, "TRIFORK_2")
-    dialog = ctk.CTkInputDialog(title="Owner Confirmation", text="Enter the relevant details")
-    dotENVHelper(dialog, "TRIFORK_OWNER")

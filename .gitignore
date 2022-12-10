@@ -1,3 +1,5 @@
 /.env
 /DONOTCOMMIT
 /__pycache__
+TIER/trifork.py
+TIER/__pycache__/trifork.cpython-311.pyc
