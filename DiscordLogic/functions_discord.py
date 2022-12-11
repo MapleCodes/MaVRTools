@@ -10,7 +10,7 @@ import asyncio, discord, dotenv, os, time
 # import functions_controller as FC
 # import functions_discord as FD
 # import initialization as MINIT
-import UI.model as MODEL
+# import UI.model as MODEL
 
 from os import system
 from pythonosc import *
@@ -45,7 +45,7 @@ class Discord(discord.Client):
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="with Maple#3668"))
-        await self.get_user(223644807761887233).send(f"Logged on as {self.user}!") # This is me | Maple#3668
+        await self.get_user(dotenv.get_key(dotenv.find_dotenv(), "USER_TOKEN")).send(f"Logged on as {self.user}!") # This is me | Maple#3668
 
         print(f"Logged on as {self.user}!")
 

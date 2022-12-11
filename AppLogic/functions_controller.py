@@ -5,9 +5,8 @@
 import dotenv, os
 
 # import TIER.trifork as TRIFORK # You won't have this one.
-import FunctionsENV.functions_env as FE
-import FunctionsHelper.functions_controller as FC
-import FunctionsDiscord.functions_discord as FD
+import dotENVLogic.functions_env as FE
+import DiscordLogic.functions_discord as FD
 # import initialization as MINIT
 # import main as MAIN
 

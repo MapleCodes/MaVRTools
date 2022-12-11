@@ -2,10 +2,10 @@
 Time Wasted: 12 hrs
 """
 
-import FunctionsENV.functions_env as FE
-import FunctionsHelper.functions_controller as FC
-import FunctionsDiscord.functions_discord as FD
-import FunctionsHelper.initialization as MINIT
+import dotENVLogic.functions_env as FE
+import AppLogic.functions_controller as FC
+import DiscordLogic.functions_discord as FD
+import AppLogic.initialization as MINIT
 import UI.function_display as FDisplay
 # import main as MAIN
 
@@ -99,8 +99,8 @@ class model(ctk.CTk):
         self.MAIN_TABVIEW = ctk.CTkTabview(self.app)
         self.MAIN_TABVIEW.grid(column=1, row=1, padx=20, pady=(0, 20), sticky="nsew")
         self.MAIN_TABVIEW.add("Discord")
-        self.MAIN_TABVIEW.add("WebCaptioner")
-        self.MAIN_TABVIEW.add("TriFork")
+        # self.MAIN_TABVIEW.add("WebCaptioner")
+        # self.MAIN_TABVIEW.add("TriFork")
 
         #region Discord TABVIEW
         self.DISCTAB_TEXTBOX_OUTPUT = ctk.CTkTextbox(self.MAIN_TABVIEW.tab('Discord'), font=("Consolas", 12))
@@ -133,10 +133,13 @@ class model(ctk.CTk):
 
         ### BEGIN ###
         if (threading.current_thread().name == "MainThread"):
+            # Check for first time launching.
             MINIT.fts()
+
             logWidget = FDisplay.Display(self.DISCTAB_TEXTBOX_OUTPUT)
             sys.stdout = logWidget
             # sys.stderr = logWidget # not in use, maybe.
+            
             self.app.mainloop()
         ### END BEGIN ###
 

@@ -10,3 +10,6 @@ class Display():
         self.textbox.insert("end", text)
         self.textbox.see("end")
         self.textbox.configure(state="disabled")
+
+    def flush(self):
+        pass

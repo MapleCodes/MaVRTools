@@ -8,10 +8,11 @@ import customtkinter as ctk
 
 def dotENVHelper(dialog, subject):
     answer = dialog.get_input()
+    if answer == "":
+        return
     dotenv.set_key(dotenv.find_dotenv(), subject, answer)
 
 def dotENVDelete():
-    # Create a random number between 1 and 100
     randomNumber = random.randint(1, 100)
     dialog = ctk.CTkInputDialog(title="Delete .env", text=f"Are you sure you want to delete the .env file? \nType {randomNumber} to confirm.")
     try:
