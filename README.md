@@ -1,3 +1,5 @@
+# DO NOT DOWNLOAD, UNDER HEAVY DEVELOPMENT!
+
 # MaVRTools
 This application aims to create a bridge between VRChat and Discord, allowing for seamless communication between the two platforms. 
 With the help of OpenAI, this application offers a variety of customizable options to enhance your experience.
