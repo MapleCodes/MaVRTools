@@ -45,7 +45,7 @@ class Discord(discord.Client):
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="with Maple#3668"))
-        await self.get_user(dotenv.get_key(dotenv.find_dotenv(), "USER_TOKEN")).send(f"Logged on as {self.user}!") # This is me | Maple#3668
+        await self.get_user(int(dotenv.get_key(dotenv.find_dotenv(), "USER_TOKEN"))).send(f"Logged on as {self.user}!") # This is me | Maple#3668
 
         print(f"Logged on as {self.user}!")
 
@@ -60,3 +60,4 @@ class Discord(discord.Client):
             return
 
         await message.channel.send(f"Hello {message.author.mention}!")
+        print(f"Message from {message.author}: {message.content}")

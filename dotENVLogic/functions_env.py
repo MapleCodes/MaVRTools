@@ -22,7 +22,8 @@ def dotENVDelete():
 
     if answer == randomNumber:
         os.remove(".env")
-        open(".env", "w").close()
+        # Close the Program.
+        exit()
     elif answer == "N":
         return
 

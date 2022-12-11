@@ -19,6 +19,7 @@ from typing import TYPE_CHECKING
 class model(ctk.CTk):
     def __init__(self, message=None, **FLOATERS):
         self.message=message # not used.
+        self.FC_CONTROLLER = FC.Start
 
         if (threading.current_thread().name == "MainThread" and TYPE_CHECKING == False):
             self.CALL()
@@ -77,10 +78,8 @@ class model(ctk.CTk):
         self.LP_BUTTON_DELETEENV = ctk.CTkButton(self.LEFT_PANEL, text="DELETE .ENV CONFIG", font=self.SIDE_BUTTON_FDATA, command=FE.dotENVDelete, fg_color="#ab1b25", hover_color="#8c1119")
         self.LP_BUTTON_DELETEENV.grid(column=0, row=12, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
-        self.LP_BUTTON_STOP = ctk.CTkButton(self.LEFT_PANEL, text="STOP", font=self.SIDE_BUTTON_FDATA, command=FC.StopApp, fg_color="#b3730c", hover_color="#6b4506")
-        self.LP_BUTTON_STOP.grid(column=0, row=13, padx=20, pady=(0, 20), ipadx=25, ipady=7)
-
-        self.LP_BUTTON_START = ctk.CTkButton(self.LEFT_PANEL, text="START ALL", font=self.SIDE_BUTTON_FDATA, command=FC.StartApp, fg_color="#1e9400", hover_color="#236912")
+        self.LP_BUTTON_START_VARIABLE = True
+        self.LP_BUTTON_START = ctk.CTkButton(self.LEFT_PANEL, text="START ALL", font=self.SIDE_BUTTON_FDATA, command=self.LP_BUTTON_START_FUNCTION, fg_color="#1e9400", hover_color="#236912")
         self.LP_BUTTON_START.grid(column=0, row=14, padx=20, pady=(0, 20), ipadx=25, ipady=7)
 
         # # # # #
@@ -108,15 +107,14 @@ class model(ctk.CTk):
         self.MAIN_TABVIEW.tab('Discord').grid_rowconfigure(0, weight=1)
 
         self.DISCTAB_TEXTBOX_OUTPUT.grid(column=0, row=0, padx=20, pady=(0, 20), sticky="nsew", columnspan=2)
-        self.DISCTAB_TEXTBOX_OUTPUT.insert("end", "< Waiting for Connection >\n")
-        self.DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
 
-        self.DISCTAB_TEXTBOX_INPUT = ctk.CTkTextbox(self.MAIN_TABVIEW.tab('Discord'), font=(f"{self.FONT}", 12), height=20)
-        self.DISCTAB_TEXTBOX_INPUT.grid(column=0, row=1, padx=(20, 0), pady=(0, 20), sticky="nsew")
-        self.DISCTAB_TEXTBOX_INPUT.bind("<Return>", self.DISCTAB_TEXTBOX_SEND_BIND)
 
-        self.DISCTAB_BUTTON_SEND = ctk.CTkButton(self.MAIN_TABVIEW.tab('Discord'), text="SEND", font=self.SIDE_BUTTON_FDATA, command=self.DISCTAB_TEXTBOX_SEND, fg_color="#1e9400", hover_color="#236912")
-        self.DISCTAB_BUTTON_SEND.grid(column=1, row=1, padx=20, pady=(0, 20), ipadx=25, ipady=5)
+        # self.DISCTAB_TEXTBOX_INPUT = ctk.CTkTextbox(self.MAIN_TABVIEW.tab('Discord'), font=(f"{self.FONT}", 12), height=20)
+        # self.DISCTAB_TEXTBOX_INPUT.grid(column=0, row=1, padx=(20, 0), pady=(0, 20), sticky="nsew")
+        # self.DISCTAB_TEXTBOX_INPUT.bind("<Return>", self.DISCTAB_TEXTBOX_SEND_BIND)
+
+        # self.DISCTAB_BUTTON_SEND = ctk.CTkButton(self.MAIN_TABVIEW.tab('Discord'), text="SEND", font=self.SIDE_BUTTON_FDATA, command=self.DISCTAB_TEXTBOX_SEND, fg_color="#1e9400", hover_color="#236912")
+        # self.DISCTAB_BUTTON_SEND.grid(column=1, row=1, padx=20, pady=(0, 20), ipadx=25, ipady=5)
 
         #endregion
 
@@ -140,6 +138,9 @@ class model(ctk.CTk):
             sys.stdout = logWidget
             # sys.stderr = logWidget # not in use, maybe.
             
+            self.DISCTAB_TEXTBOX_OUTPUT.insert("end", "< !!! >\n") # To be changed for a function call instead.
+            self.DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
+
             self.app.mainloop()
         ### END BEGIN ###
 
@@ -150,26 +151,62 @@ class model(ctk.CTk):
         elif self.LP_SWITCH_VAR.get() == "on":
             self.LP_BUTTON_DELETEENV.configure(state="normal")
 
-    def DISCTAB_TEXTBOX_SEND(self):
-        message = self.DISCTAB_TEXTBOX_INPUT.get("0.0", "end")[:-1]
-        message = message.replace("\n", "")
-        self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
-        if message.__len__() > 0:
-            self.DISCTAB_TEXTBOX_OUTPUT.configure(state="normal")
-            self.DISCTAB_TEXTBOX_OUTPUT.insert("end", f"YOU: {message}\n")
-            self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
-            self.DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
+    def LP_BUTTON_START_FUNCTION(self):
+        failed = False
+        if(dotenv.get_key(dotenv.find_dotenv(), "USER_TOKEN") == ""): 
+            print("Please delete the current .env file and restart the program.")
+            failed = True
 
-    # Something wrong with Tkinter and binds. This is a workaround.
-    def DISCTAB_TEXTBOX_SEND_BIND(self, events):
-        message = self.DISCTAB_TEXTBOX_INPUT.get("0.0", "end")[:-1]
-        if message == "\n":
-            self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
-            return
+        if(dotenv.get_key(dotenv.find_dotenv(), "DISCORD_TOKEN") == ""): 
+            print("Please enter a Discord token.")
+            failed = True
+
+        if(dotenv.get_key(dotenv.find_dotenv(), "OPENAI_TOKEN") == ""): 
+            print("Please enter an OpenAI token.")
+            failed = True
+
+        if(failed): return
         
-        self.DISCTAB_TEXTBOX_SEND()
-        self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
-        # DISCTAB_BUTTON_SEND.destroy()
+        if (self.LP_BUTTON_START_VARIABLE == False):
+            self.LP_BUTTON_DISCORD.configure(state="normal")
+            self.LP_BUTTON_OPENAI.configure(state="normal")
+            self.LP_BUTTON_WEBCAPTIONER.configure(state="disabled")
+            self.LP_BUTTON_TRIFORK.configure(state="disabled")
+            self.LP_BUTTON_START.configure(text="START ALL", fg_color="#1e9400", hover_color="#236912")
+
+            self.LP_BUTTON_START_VARIABLE = True
+
+        else:
+            self.LP_BUTTON_DISCORD.configure(state="disabled")
+            self.LP_BUTTON_OPENAI.configure(state="disabled")
+            self.LP_BUTTON_WEBCAPTIONER.configure(state="disabled")
+            self.LP_BUTTON_TRIFORK.configure(state="disabled")
+            self.LP_BUTTON_START.configure(text="STOP ALL", fg_color="#940000", hover_color="#b00000")
+
+            self.LP_BUTTON_START.configure(state="disabled") # For now disable it.
+            
+            self.LP_BUTTON_START_VARIABLE = False
+
+    # def DISCTAB_TEXTBOX_SEND(self):
+    #     message = self.DISCTAB_TEXTBOX_INPUT.get("0.0", "end")[:-1]
+    #     message = message.replace("\n", "")
+    #     self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+    #     if message.__len__() > 0:
+    #         self.DISCTAB_TEXTBOX_OUTPUT.configure(state="normal")
+    #         self.DISCTAB_TEXTBOX_OUTPUT.insert("end", f"YOU: {message}\n")
+    #         self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+    #         self.DISCTAB_TEXTBOX_OUTPUT.configure(state="disabled")
+
+    # # Something wrong with Tkinter and binds. This is a workaround.
+    # def DISCTAB_TEXTBOX_SEND_BIND(self, events):
+    #     message = self.DISCTAB_TEXTBOX_INPUT.get("0.0", "end")[:-1]
+    #     if message == "\n":
+    #         self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+    #         return
+        
+    #     self.DISCTAB_TEXTBOX_SEND()
+    #     self.DISCTAB_TEXTBOX_INPUT.delete("0.0", "end")
+    #     # DISCTAB_BUTTON_SEND.destroy()
 
     ### END INLINE FUNCTIONS ###
 
