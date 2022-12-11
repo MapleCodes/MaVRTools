@@ -10,7 +10,7 @@ import asyncio, discord, dotenv, os, time
 # import functions_controller as FC
 # import functions_discord as FD
 # import initialization as MINIT
-# import main as MAIN
+import UI.model as MODEL
 
 from os import system
 from pythonosc import *
@@ -46,6 +46,8 @@ class Discord(discord.Client):
     async def on_ready(self):
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="with Maple#3668"))
         await self.get_user(223644807761887233).send(f"Logged on as {self.user}!") # This is me | Maple#3668
+
+        print(f"Logged on as {self.user}!")
 
         global only_channels
         only_channels = ["DM"] # Add the channel here, will be modular in the future.
