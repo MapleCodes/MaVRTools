@@ -11,10 +11,10 @@ With the help of OpenAI, this application offers a variety of customizable optio
 - [Optional] OpenAI for Giving that brain to your Discord Bot, which can talk back in VRChat!
 
 ## Getting Started
-1 Download and Install the Application
-2 Open the application and navigate to the setting menu
-3 Configure all the important settings
-4 Enjoy!
+- Download and Install the Application
+- Open the application and navigate to the setting menu
+- Configure all the important settings
+- Enjoy!
 
 ## Support
 Just contact me @ Maple#3668
