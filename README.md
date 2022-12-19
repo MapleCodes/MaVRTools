@@ -1,5 +1,5 @@
 # MaVRTools
-A tool for connecting VRChat and Discord, allowing for easy communication between the two platforms. This application offers customizable options and an easy-to-use GUI for configuration. With the optional use of OpenAI, you can even give your Discord bot the ability to talk back in VRChat!
+A tool for connecting [VRChat](https://vrchat.com/ "VRChat") and [Discord](https://discord.com/ "Discord"), allowing for easy communication between the two platforms. This application offers customizable options and an easy-to-use GUI for configuration. With the optional use of OpenAI, you can even give your Discord bot the ability to talk back in VRChat!
 
 ## Features
 + Seamless communication between VRChat and Discord
@@ -14,4 +14,4 @@ A tool for connecting VRChat and Discord, allowing for easy communication betwee
 4. Enjoy!
 5. 
 ## Support
-For support, please contact me at Maple#3668 on Discord.
+For support, please contact me at [Maple#3668](https://discord.com/users/223644807761887233 "Maple#3668") on Discord.
