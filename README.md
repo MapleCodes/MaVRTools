@@ -11,6 +11,7 @@ A tool for connecting [VRChat](https://vrchat.com/ "VRChat") and [Discord](https
 + [Python](https://www.python.org Python/)
 + [VRChat](https://vrchat.com/ "VRChat")
 + [Discord](https://discord.com/ "Discord")
++ <sup>[Optional]</sup> [OpenAI](https://openai.com/ "OpenAI")
 
 ## Getting Started
 1. Download and install the application
