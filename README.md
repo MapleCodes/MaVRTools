@@ -5,13 +5,13 @@ A tool for connecting [VRChat](https://vrchat.com/ "VRChat") and [Discord](https
 + Seamless communication between VRChat and Discord
 + Customizable options to enhance your experience
 + Easy-to-use GUI for configuration
-+ <sup>[Optional]</sup> OpenAI integration for giving your Discord bot the ability to talk back in VRChat
++ OpenAI <sup>[Optional]</sup> integration for giving your Discord bot the ability to answer prompts.
 
 ## Requirements
 + [Python](https://www.python.org/ "Python")
 + [VRChat](https://vrchat.com/ "VRChat")
 + [Discord](https://discord.com/ "Discord")
-+ <sup>[Optional]</sup> [OpenAI](https://openai.com/ "OpenAI")
++ [OpenAI] <sup>[Optional]</sup> (https://openai.com/ "OpenAI")
 
 ## Getting Started
 1. Download and install the application
